@@ -42,8 +42,8 @@ class SingleQubitQuantumGate(QuantumGate):
         wire = self.wires[0]
         n = self.n
 
-        st_vec = st_vec.reshape((2 ** (n - wire - 1), 2, 2 ** wire))
-        new_st_vec = np.empty_like(st_vec)
+        st_vec = st_vec.reshape((2 ** (n - wire - 1), 2, 2 ** wire)).astype(np.complex_)
+        new_st_vec = st_vec.copy()
         new_st_vec[:, 0, :] = st_vec[:, 0, :] * self.single_qubit_matrix[0, 0] + st_vec[:, 1, :] * self.single_qubit_matrix[0, 1]
         new_st_vec[:, 1, :] = st_vec[:, 0, :] * self.single_qubit_matrix[1, 0] + st_vec[:, 1, :] * self.single_qubit_matrix[1, 1]
         new_st_vec = new_st_vec.reshape((2 ** n))
@@ -59,7 +59,7 @@ class PauliX(SingleQubitQuantumGate):
         wire = self.wires[0]
         n = self.n
 
-        st_vec = st_vec.reshape((2 ** (n - wire - 1), 2, 2 ** wire))
+        st_vec = st_vec.reshape((2 ** (n - wire - 1), 2, 2 ** wire)).astype(np.complex_)
         st_vec = st_vec[:, [1, 0], :]
         st_vec = st_vec.reshape((2 ** n))
 
@@ -75,7 +75,7 @@ class PauliY(SingleQubitQuantumGate):
         wire = self.wires[0]
         n = self.n
 
-        st_vec = st_vec.reshape((2 ** (n - wire - 1), 2, 2 ** wire))
+        st_vec = st_vec.reshape((2 ** (n - wire - 1), 2, 2 ** wire)).astype(np.complex_)
         st_vec = st_vec[:, [1, 0], :] * self.multiplier
         st_vec = st_vec.reshape((2 ** n))
 
@@ -90,7 +90,7 @@ class PauliZ(SingleQubitQuantumGate):
         wire = self.wires[0]
         n = self.n
 
-        st_vec = st_vec.copy().reshape((2 ** (n - wire - 1), 2, 2 ** wire))
+        st_vec = st_vec.copy().reshape((2 ** (n - wire - 1), 2, 2 ** wire)).astype(np.complex_)
         st_vec[:, 1, :] = st_vec[:, 1, :] * (-1)
         st_vec = st_vec.reshape((2 ** n))
 
@@ -105,8 +105,8 @@ class Hadamard(SingleQubitQuantumGate):
         wire = self.wires[0]
         n = self.n
 
-        st_vec = st_vec.reshape((2 ** (n - wire - 1), 2, 2 ** wire))
-        new_st_vec = np.empty_like(st_vec)
+        st_vec = st_vec.reshape((2 ** (n - wire - 1), 2, 2 ** wire)).astype(np.complex_)
+        new_st_vec = st_vec.copy()
         new_st_vec[:, 0, :] = (st_vec[:, 0, :] + st_vec[:, 1, :]) * (2 ** (-1/2))
         new_st_vec[:, 1, :] = (st_vec[:, 0, :] - st_vec[:, 1, :]) * (2 ** (-1 / 2))
         new_st_vec = new_st_vec.reshape((2 ** n))
@@ -122,7 +122,7 @@ class PhaseS(SingleQubitQuantumGate):
         wire = self.wires[0]
         n = self.n
 
-        st_vec = st_vec.copy().reshape((2 ** (n - wire - 1), 2, 2 ** wire))
+        st_vec = st_vec.copy().reshape((2 ** (n - wire - 1), 2, 2 ** wire)).astype(np.complex_)
         st_vec[:, 1, :] = st_vec[:, 1, :] * 1j
         st_vec = st_vec.reshape((2 ** n))
 
@@ -137,7 +137,7 @@ class Pi8thT(SingleQubitQuantumGate):
         wire = self.wires[0]
         n = self.n
 
-        st_vec = st_vec.copy().reshape((2 ** (n - wire - 1), 2, 2 ** wire))
+        st_vec = st_vec.copy().reshape((2 ** (n - wire - 1), 2, 2 ** wire)).astype(np.complex_)
         st_vec[:, 1, :] = st_vec[:, 1, :] * np.exp(1j * np.pi / 4)
         st_vec = st_vec.reshape((2 ** n))
 
@@ -163,7 +163,7 @@ class RotZ(SingleQubitQuantumGate):
         wire = self.wires[0]
         n = self.n
 
-        st_vec = st_vec.reshape((2 ** (n - wire - 1), 2, 2 ** wire))
+        st_vec = st_vec.reshape((2 ** (n - wire - 1), 2, 2 ** wire)).astype(np.complex_)
         st_vec = st_vec * self.multiplier
         st_vec = st_vec.reshape((2 ** n))
 
@@ -203,7 +203,7 @@ class CNOT(QuantumGate):
             pref_wire = wire
         slices += [2 ** pref_wire]
 
-        st_vec = st_vec.copy().reshape(tuple(slices))
+        st_vec = st_vec.copy().reshape(tuple(slices)).astype(np.complex_)
 
         if self.target == self.wires[0]:
             st_vec[:, 1, :, :, :] = np.take(st_vec[:, 1, :, :, :], [1, 0], axis=2)
