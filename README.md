@@ -34,4 +34,7 @@ A state-vector is always a numpy array of type ```np.complex_```.
 
 The ```test.py``` script offers insights on the usage of selected single gates. The ```benchmark.py``` script compares the 
 runtime of naive apply vs efficient apply for a circuit, that applies ```Hadamard``` for every qubit in a 10-qubit system.
- 
+
+## Inspiration
+
+This simulator was inspired by https://github.com/Qaintum/Qaintessent.jl
